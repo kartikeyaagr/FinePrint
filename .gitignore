@@ -6,3 +6,4 @@ dist/
 .env.local
 .gstack/
 .claude/worktrees/
+.claude
