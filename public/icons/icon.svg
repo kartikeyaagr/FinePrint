@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Shield shape -->
+  <path d="M64 8 L112 28 L112 64 C112 92 92 112 64 120 C36 112 16 92 16 64 L16 28 Z"
+        fill="#3B82F6" stroke="#1D4ED8" stroke-width="3"/>
+  <!-- Inner shield highlight -->
+  <path d="M64 18 L102 34 L102 64 C102 86 86 102 64 110 C42 102 26 86 26 64 L26 34 Z"
+        fill="#60A5FA" opacity="0.3"/>
+  <!-- Document icon inside shield -->
+  <rect x="42" y="36" width="44" height="56" rx="4" fill="white" opacity="0.9"/>
+  <!-- Text lines on document -->
+  <rect x="50" y="46" width="28" height="3" rx="1.5" fill="#3B82F6" opacity="0.6"/>
+  <rect x="50" y="54" width="24" height="3" rx="1.5" fill="#3B82F6" opacity="0.4"/>
+  <rect x="50" y="62" width="28" height="3" rx="1.5" fill="#3B82F6" opacity="0.6"/>
+  <rect x="50" y="70" width="20" height="3" rx="1.5" fill="#3B82F6" opacity="0.4"/>
+  <rect x="50" y="78" width="26" height="3" rx="1.5" fill="#3B82F6" opacity="0.6"/>
+</svg>
