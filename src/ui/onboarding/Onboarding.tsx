@@ -12,7 +12,7 @@ export function Onboarding() {
     if (!apiKey.trim()) return;
     setError("");
     try {
-      await chrome.runtime.sendMessage({
+      const response = await chrome.runtime.sendMessage({
         type: "SAVE_SETTINGS",
         data: {
           llm: {
@@ -23,6 +23,9 @@ export function Onboarding() {
           detection: { enabled: true, confidenceThreshold: 0.5 },
         },
       });
+      if (response?.success === false) {
+        throw new Error(response.error || "Failed to save settings.");
+      }
       setStep("done");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save.");
@@ -77,10 +80,11 @@ export function Onboarding() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-600">
+                <label htmlFor="api-key-input" className="text-xs font-medium text-gray-600">
                   Paste your access code
                 </label>
                 <input
+                  id="api-key-input"
                   type="password"
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}

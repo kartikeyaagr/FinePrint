@@ -1,7 +1,7 @@
 /**
  * Common LLM adapter interface and factory.
  *
- * Provides a unified interface for Claude and Gemini providers,
+ * Provides a unified interface for LLM providers (currently Gemini),
  * with a factory function to instantiate the correct adapter
  * based on configuration.
  */

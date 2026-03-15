@@ -29,18 +29,22 @@ export interface AnalysisWithDiff {
 /** Maximum age of a cached analysis before re-analysis (7 days). */
 const CACHE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
-/** Shared cache manager instance. */
-let cacheManager: CacheManager | null = null;
+/** Shared cache manager promise for singleton initialization. */
+let cacheManagerPromise: Promise<CacheManager> | null = null;
 
 /**
  * Get the shared cache manager, initializing it if needed.
+ * Uses a promise-based singleton to prevent race conditions on concurrent calls.
  */
 export async function getCache(): Promise<CacheManager> {
-  if (!cacheManager) {
-    cacheManager = new CacheManager();
-    await cacheManager.init();
+  if (!cacheManagerPromise) {
+    cacheManagerPromise = (async () => {
+      const manager = new CacheManager();
+      await manager.init();
+      return manager;
+    })();
   }
-  return cacheManager;
+  return cacheManagerPromise;
 }
 
 /**
@@ -64,7 +68,12 @@ export async function analyzeTC(
   onProgress?: (progress: AnalysisProgressData) => void
 ): Promise<AnalysisWithDiff> {
   const cache = await getCache();
-  const domain = new URL(url).hostname;
+  let domain: string;
+  try {
+    domain = new URL(url).hostname;
+  } catch {
+    throw new Error(`Invalid URL provided: ${url}`);
+  }
 
   // ── Step 1: Check cache ──────────────────────────────────────────
   const cached = await cache.getAnalysis(url);

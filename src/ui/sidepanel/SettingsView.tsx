@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Settings } from "@/shared/types";
 import { DEFAULT_SETTINGS } from "@/shared/types";
 
@@ -11,15 +11,23 @@ export function SettingsView({ settings, onSave }: SettingsViewProps) {
   const [local, setLocal] = useState<Settings>(settings ?? DEFAULT_SETTINGS);
   const [saved, setSaved] = useState(false);
   const [showKey, setShowKey] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (settings) setLocal(settings);
   }, [settings]);
 
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   const handleSave = () => {
     onSave(local);
     setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setSaved(false), 2000);
   };
 
   const updateLLM = (updates: Partial<Settings["llm"]>) => {
@@ -146,7 +154,9 @@ function ApiKeyInput({
           className="w-full px-3 py-2 pr-16 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
         <button
+          type="button"
           onClick={onToggleShow}
+          aria-label={`${showKey ? "Hide" : "Show"} API key`}
           className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-gray-600"
         >
           {showKey ? "Hide" : "Show"}

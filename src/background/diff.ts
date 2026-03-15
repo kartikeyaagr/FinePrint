@@ -34,12 +34,15 @@ export function computeDiff(
   const currentNormalized = currentParagraphs.map(normalizeParagraph);
   const previousNormalized = previousParagraphs.map(normalizeParagraph);
 
-  // Build a map from normalized text to index for the previous version
-  const prevMap = new Map<string, number>();
+  // Build a map from normalized text to list of indices for the previous version
+  const prevMap = new Map<string, number[]>();
   for (let i = 0; i < previousNormalized.length; i++) {
-    // Only store the first occurrence
-    if (!prevMap.has(previousNormalized[i])) {
-      prevMap.set(previousNormalized[i], i);
+    const norm = previousNormalized[i];
+    const indices = prevMap.get(norm);
+    if (indices) {
+      indices.push(i);
+    } else {
+      prevMap.set(norm, [i]);
     }
   }
 
@@ -60,8 +63,11 @@ export function computeDiff(
   // For each current paragraph, check if it existed before
   for (let i = 0; i < currentNormalized.length; i++) {
     const normalized = currentNormalized[i];
-    if (prevMap.has(normalized)) {
-      matchedPrev.add(prevMap.get(normalized)!);
+    const prevIndices = prevMap.get(normalized);
+    // Find the first unmatched previous index for this normalized text
+    const unmatchedIdx = prevIndices?.find((idx) => !matchedPrev.has(idx));
+    if (unmatchedIdx !== undefined) {
+      matchedPrev.add(unmatchedIdx);
     } else {
       // Try to find a similar paragraph in previous (modification detection)
       const bestMatch = findBestMatch(

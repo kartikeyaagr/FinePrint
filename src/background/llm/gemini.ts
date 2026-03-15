@@ -34,7 +34,12 @@ export class GeminiAdapter implements LLMAdapter {
     }
 
     const { system, user } = buildAnalysisPrompt(text, url);
-    const domain = new URL(url).hostname;
+    let domain: string;
+    try {
+      domain = new URL(url).hostname;
+    } catch {
+      throw new NonRetryableError(`Invalid URL provided for analysis: ${url}`);
+    }
 
     const endpoint = `${GEMINI_API_BASE}/${this.model}:generateContent?key=${this.apiKey}`;
 

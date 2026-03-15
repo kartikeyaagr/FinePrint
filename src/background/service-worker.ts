@@ -208,15 +208,17 @@ chrome.runtime.onMessage.addListener(
 
       case "SAVE_SETTINGS": {
         const settings = data as Settings;
-        saveSettings(settings).then(() => {
-          // If API key was provided, mark setup as complete
-          if (settings.llm.apiKey) {
-            completeSetupWithApiKey(settings.llm.provider)
-              .then(() => sendResponse({ success: true }));
-          } else {
+        saveSettings(settings)
+          .then(async () => {
+            if (settings.llm.apiKey) {
+              await completeSetupWithApiKey(settings.llm.provider);
+            }
             sendResponse({ success: true });
-          }
-        });
+          })
+          .catch((err) => {
+            console.error("[fineprint] Failed to save settings:", err);
+            sendResponse({ success: false, error: String(err) });
+          });
         return true;
       }
 

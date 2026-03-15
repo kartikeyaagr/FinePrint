@@ -66,6 +66,7 @@ Handles all heavy lifting. Runs in extension's isolated context.
 | `analyzer.ts`       | Orchestrate: extract → LLM → parse → cache   |
 | `rating.ts`         | Compute security rating from clause analysis |
 | `diff.ts`           | Compare T&C versions, compute change set     |
+| `red-flags.ts`      | Instant regex-based red flag pattern scanner |
 | `cache.ts`          | IndexedDB wrapper for all persistent data    |
 
 ### LLM Layer (`src/background/llm/`)

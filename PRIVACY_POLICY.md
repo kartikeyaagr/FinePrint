@@ -1,6 +1,6 @@
 # Privacy Policy — FinePrint
 
-**Last updated:** March 16, 2026
+**Last updated:** March 15, 2026
 
 FinePrint is a Chrome extension that helps you understand Terms & Conditions and Privacy Policies by providing AI-powered summaries and security ratings. This privacy policy explains what data the extension accesses, how it is used, and how it is protected.
 
@@ -60,7 +60,7 @@ Tab URLs are **not logged, collected, or transmitted** to any external service.
 
 All data is stored **locally on your device** using standard Chrome extension storage mechanisms:
 
-- **`chrome.storage.local`** — Stores your API key, extension settings, and overlay dismissal preferences. This storage is encrypted at rest by Chrome and is only accessible to the FinePrint extension.
+- **`chrome.storage.local`** — Stores your API key, extension settings, and overlay dismissal preferences. This storage is encrypted at rest by Chrome and is only accessible to the FinePrint extension. **Note:** If you have Chrome Sync enabled, this data (including your API key) may be synchronized to Google's servers and your other Chrome browsers. You can disable extension sync in Chrome settings to keep data on a single device.
 - **IndexedDB** — Stores cached analysis results and document version history for diff tracking. This data remains on your device and is subject to a maximum storage limit of 50 MB with automatic cleanup of oldest entries.
 
 No data is stored on any external server, cloud service, or database operated by FinePrint or its developers.

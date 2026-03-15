@@ -101,7 +101,7 @@ Revisit a site and FinePrint compares the current T&C against the last version i
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/fineprint.git
+git clone https://github.com/kartikeyaagr/fineprint.git
 cd fineprint
 
 # Install dependencies

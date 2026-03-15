@@ -54,7 +54,7 @@ export function RatingView({ score }: RatingViewProps) {
         <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full transition-all duration-500 ${color.bar}`}
-            style={{ width: `${score.overall * 10}%` }}
+            style={{ width: `${Math.min(100, Math.max(0, score.overall * 10))}%` }}
           />
         </div>
         <p className={`text-sm font-medium ${color.text}`}>
@@ -91,7 +91,7 @@ export function RatingView({ score }: RatingViewProps) {
               <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${dimColor.bar}`}
-                  style={{ width: `${value * 10}%` }}
+                  style={{ width: `${Math.min(100, Math.max(0, value * 10))}%` }}
                 />
               </div>
               <p className="text-[11px] text-gray-400">{dim.description}</p>

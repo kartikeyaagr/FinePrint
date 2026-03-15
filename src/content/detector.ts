@@ -111,7 +111,8 @@ function buildSelector(anchor: HTMLAnchorElement): string {
   const href = anchor.getAttribute("href");
   if (href) return `a[href="${CSS.escape(href)}"]`;
 
-  return "a";
+  // Cannot reliably identify this anchor — return empty string
+  return "";
 }
 
 /**
@@ -123,22 +124,23 @@ function buildSelector(anchor: HTMLAnchorElement): string {
  */
 export function scanForTCLinks(): DetectedLink[] {
   const anchors = document.querySelectorAll<HTMLAnchorElement>("a[href]");
-  const seen = new Set<string>();
-  const results: DetectedLink[] = [];
+  const seen = new Map<string, DetectedLink>();
 
   for (const anchor of anchors) {
     const link = scoreLink(anchor);
     if (!link) continue;
 
-    // Deduplicate by normalized URL (strip trailing slash and fragment)
+    // Deduplicate by normalized URL (strip trailing slash and fragment),
+    // keeping the highest-confidence entry per URL
     const normalizedUrl = link.url.replace(/#.*$/, "").replace(/\/$/, "");
-    if (seen.has(normalizedUrl)) continue;
-    seen.add(normalizedUrl);
-
-    results.push(link);
+    const existing = seen.get(normalizedUrl);
+    if (!existing || link.confidence > existing.confidence) {
+      seen.set(normalizedUrl, link);
+    }
   }
 
   // Sort by confidence descending, then cap
+  const results = Array.from(seen.values());
   results.sort((a, b) => b.confidence - a.confidence);
   return results.slice(0, MAX_LINKS_PER_PAGE);
 }

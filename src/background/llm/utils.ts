@@ -66,11 +66,18 @@ export function parseAnalysisResponse(raw: string): ParsedAnalysis {
         ? parsed.readingTimeMinutes
         : undefined,
     clauses: Array.isArray(parsed.clauses)
-      ? (parsed.clauses as ClauseAnalysis[])
+      ? parsed.clauses.filter(
+          (c): c is ClauseAnalysis =>
+            typeof c === "object" &&
+            c !== null &&
+            typeof (c as Record<string, unknown>).title === "string" &&
+            typeof (c as Record<string, unknown>).summary === "string"
+        )
       : [],
     worstClause:
       parsed.worstClause &&
-      typeof parsed.worstClause === "object"
+      typeof parsed.worstClause === "object" &&
+      typeof (parsed.worstClause as Record<string, unknown>).reason === "string"
         ? (parsed.worstClause as WorstClause)
         : null,
   };
@@ -89,9 +96,10 @@ export async function retryWithBackoff<T>(
   fn: () => Promise<T>,
   maxRetries: number
 ): Promise<T> {
+  const retries = Math.max(0, maxRetries);
   let lastError: Error | undefined;
 
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
     try {
       return await fn();
     } catch (err) {
@@ -102,12 +110,12 @@ export async function retryWithBackoff<T>(
         throw err;
       }
 
-      if (attempt < maxRetries) {
+      if (attempt < retries) {
         const delayMs = 1000 * Math.pow(2, attempt);
         await new Promise((resolve) => setTimeout(resolve, delayMs));
       }
     }
   }
 
-  throw lastError;
+  throw lastError ?? new Error("retryWithBackoff: no attempts were made");
 }

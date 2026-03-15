@@ -80,15 +80,20 @@ class InMemoryCache {
 export class CacheManager {
   private db: IDBPDatabase<CacheDB> | null = null;
   private fallback: InMemoryCache | null = null;
-  private initialized = false;
+  private initPromise: Promise<void> | null = null;
 
   /**
    * Open or create the IndexedDB database. Falls back to in-memory
    * cache if IndexedDB throws SecurityError (private browsing).
+   * Uses promise coalescing to prevent concurrent initialization.
    */
   async init(): Promise<void> {
-    if (this.initialized) return;
+    if (this.initPromise) return this.initPromise;
+    this.initPromise = this.doInit();
+    return this.initPromise;
+  }
 
+  private async doInit(): Promise<void> {
     try {
       this.db = await openDB<CacheDB>(CACHE_DB_NAME, CACHE_DB_VERSION, {
         upgrade(db) {
@@ -115,45 +120,51 @@ export class CacheManager {
           }
         },
       });
-      this.initialized = true;
     } catch (err) {
       if (err instanceof DOMException && err.name === "SecurityError") {
         console.warn(
           "[fineprint] IndexedDB unavailable (private browsing), using in-memory cache"
         );
         this.fallback = new InMemoryCache();
-        this.initialized = true;
       } else {
         throw err;
       }
     }
   }
 
+  private ensureInitialized(): void {
+    if (!this.db && !this.fallback) {
+      throw new Error("CacheManager not initialized. Call init() first.");
+    }
+  }
+
   /** Get the latest cached TCVersion for a URL. */
   async getVersion(url: string): Promise<TCVersion | undefined> {
+    this.ensureInitialized();
     if (this.fallback) return this.fallback.getVersion(url);
-    return this.db?.get("versions", url);
+    return this.db!.get("versions", url);
   }
 
   /** Get all cached versions for a domain (useful when URLs change). */
   async getVersionByDomain(domain: string): Promise<TCVersion[]> {
+    this.ensureInitialized();
     if (this.fallback) return this.fallback.getVersionByDomain(domain);
-    if (!this.db) return [];
-    return this.db.getAllFromIndex("versions", "domain", domain);
+    return this.db!.getAllFromIndex("versions", "domain", domain);
   }
 
   /** Store a T&C version. Handles QuotaExceededError by evicting old entries. */
   async saveVersion(version: TCVersion): Promise<void> {
+    this.ensureInitialized();
     if (this.fallback) {
       this.fallback.saveVersion(version);
       return;
     }
     try {
-      await this.db?.put("versions", version);
+      await this.db!.put("versions", version);
     } catch (err) {
       if (isQuotaExceeded(err)) {
         await this.evictOldest(50);
-        await this.db?.put("versions", version);
+        await this.db!.put("versions", version);
       } else {
         throw err;
       }
@@ -162,22 +173,24 @@ export class CacheManager {
 
   /** Get a cached analysis result for a URL. */
   async getAnalysis(url: string): Promise<AnalysisResult | undefined> {
+    this.ensureInitialized();
     if (this.fallback) return this.fallback.getAnalysis(url);
-    return this.db?.get("analyses", url);
+    return this.db!.get("analyses", url);
   }
 
   /** Store an analysis result. Handles QuotaExceededError by evicting old entries. */
   async saveAnalysis(result: AnalysisResult): Promise<void> {
+    this.ensureInitialized();
     if (this.fallback) {
       this.fallback.saveAnalysis(result);
       return;
     }
     try {
-      await this.db?.put("analyses", result);
+      await this.db!.put("analyses", result);
     } catch (err) {
       if (isQuotaExceeded(err)) {
         await this.evictOldest(50);
-        await this.db?.put("analyses", result);
+        await this.db!.put("analyses", result);
       } else {
         throw err;
       }

@@ -19,16 +19,18 @@ export default function Popup() {
   const [authState, setAuthState] = useState<AuthState | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
+
     // Load auth state
     sendToBackground("GET_AUTH_STATE", {}).then((state) => {
-      if (state) setAuthState(state as AuthState);
+      if (state && !cancelled) setAuthState(state as AuthState);
     });
 
     // Query the current tab for detected links
     chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
       const tab = tabs[0];
       if (!tab?.id) {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
         return;
       }
 
@@ -36,13 +38,14 @@ export default function Popup() {
         const response = await chrome.tabs.sendMessage(tab.id, {
           type: "GET_DETECTED_LINKS",
         });
-        if (response?.links) {
+        if (response?.links && !cancelled) {
           const detectedLinks = response.links as DetectedLink[];
           setLinks(detectedLinks);
 
           // Check cache for each link
           const analysisMap = new Map<string, AnalysisResult>();
           for (const link of detectedLinks) {
+            if (cancelled) return;
             const result = await sendToBackground("GET_ANALYSIS", {
               url: link.url,
             });
@@ -50,13 +53,15 @@ export default function Popup() {
               analysisMap.set(link.url, result as AnalysisResult);
             }
           }
-          setAnalyses(analysisMap);
+          if (!cancelled) setAnalyses(analysisMap);
         }
       } catch {
         // Content script not loaded on this page (e.g., chrome:// pages)
       }
-      setLoading(false);
+      if (!cancelled) setLoading(false);
     });
+
+    return () => { cancelled = true; };
   }, []);
 
   const handleAnalyze = (url: string) => {
@@ -73,8 +78,6 @@ export default function Popup() {
   };
 
   const openSettings = () => {
-    // Open the onboarding/settings page
-    chrome.runtime.getURL("src/ui/onboarding/index.html");
     chrome.tabs.create({
       url: chrome.runtime.getURL("src/ui/onboarding/index.html"),
     });
@@ -134,7 +137,7 @@ export default function Popup() {
                   <span className="text-xs font-medium text-gray-800 truncate max-w-[180px]">
                     {link.linkText || link.url}
                   </span>
-                  {analysis ? (
+                  {analysis?.securityScore?.overall != null ? (
                     <ScoreBadge score={analysis.securityScore.overall} />
                   ) : (
                     <span className="text-[10px] text-gray-400">

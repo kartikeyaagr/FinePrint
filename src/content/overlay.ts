@@ -4,7 +4,7 @@
  * Shows a non-intrusive prompt near accept/agree buttons when T&C links
  * are detected, encouraging users to understand what they are agreeing to.
  * Uses Shadow DOM for CSS isolation. Dismissals are remembered per-domain
- * via chrome.storage.session.
+ * via chrome.storage.local.
  */
 
 import type { DetectedLink } from "../shared/types";
@@ -91,7 +91,13 @@ export async function showOverlay(
   link: DetectedLink,
   wordCount?: number
 ): Promise<void> {
-  const domain = new URL(link.url).hostname;
+  let domain: string;
+  try {
+    domain = new URL(link.url).hostname;
+  } catch {
+    console.debug("[fineprint] Invalid URL, skipping overlay:", link.url);
+    return;
+  }
 
   // Don't show if already dismissed for this domain
   if (await shouldShowOverlay(domain) === false) return;
@@ -115,20 +121,40 @@ export async function showOverlay(
     ? `~${Math.ceil(wordCount / WORDS_PER_MINUTE)} min read`
     : null;
 
-  container.innerHTML = `
-    <div class="tr-overlay__title">
-      \u{1F6E1}\uFE0F Want to understand what you're agreeing to?
-    </div>
-    <div class="tr-overlay__body">
-      We detected a <strong>${link.type}</strong> document on this page.
-      FinePrint can analyze it for you in seconds.
-    </div>
-    ${readingTime ? `<div class="tr-overlay__meta">${readingTime} (${wordCount!.toLocaleString()} words) — let us summarize it</div>` : ""}
-    <div class="tr-overlay__actions">
-      <button class="tr-btn tr-btn--primary" data-action="analyze">Analyze</button>
-      <button class="tr-btn tr-btn--secondary" data-action="dismiss">Not now</button>
-    </div>
-  `;
+  const title = document.createElement("div");
+  title.className = "tr-overlay__title";
+  title.textContent = "\u{1F6E1}\uFE0F Want to understand what you're agreeing to?";
+  container.appendChild(title);
+
+  const body = document.createElement("div");
+  body.className = "tr-overlay__body";
+  body.appendChild(document.createTextNode("We detected a "));
+  const strong = document.createElement("strong");
+  strong.textContent = link.type;
+  body.appendChild(strong);
+  body.appendChild(document.createTextNode(" document on this page. FinePrint can analyze it for you in seconds."));
+  container.appendChild(body);
+
+  if (readingTime) {
+    const meta = document.createElement("div");
+    meta.className = "tr-overlay__meta";
+    meta.textContent = `${readingTime} (${wordCount!.toLocaleString()} words) — let us summarize it`;
+    container.appendChild(meta);
+  }
+
+  const actions = document.createElement("div");
+  actions.className = "tr-overlay__actions";
+  const analyzeBtn = document.createElement("button");
+  analyzeBtn.className = "tr-btn tr-btn--primary";
+  analyzeBtn.setAttribute("data-action", "analyze");
+  analyzeBtn.textContent = "Analyze";
+  const dismissBtn = document.createElement("button");
+  dismissBtn.className = "tr-btn tr-btn--secondary";
+  dismissBtn.setAttribute("data-action", "dismiss");
+  dismissBtn.textContent = "Not now";
+  actions.appendChild(analyzeBtn);
+  actions.appendChild(dismissBtn);
+  container.appendChild(actions);
 
   shadow.appendChild(container);
 

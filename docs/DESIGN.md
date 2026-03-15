@@ -189,10 +189,10 @@ Return a JSON object with this exact schema:
 
 **Instant detection (no LLM needed):**
 
-| Pattern                 | Regex/Keyword                                       | Severity    |
-| ----------------------- | --------------------------------------------------- | ----------- | --- | ----- | -------- |
-| Forced arbitration      | `arbitrat(ion                                       | e).\*waiv(e | er  | ing)` | Critical |
-| Data sale               | `sell.*data\|data.*sold\|third.part(y\|ies).*share` | Critical    |
+| Pattern                 | Regex/Keyword                                         | Severity |
+| ----------------------- | ----------------------------------------------------- | -------- |
+| Forced arbitration      | `arbitrat(ion\|e).*waiv(e\|er\|ing)`                  | Critical |
+| Data sale               | `sell.*data\|data.*sold\|third.part(y\|ies).*share`   | Critical |
 | Auto-renewal trap       | `auto.?renew.*cancel.*before`                       | Warning     |
 | Unilateral changes      | `modify.*terms.*without.*notice`                    | Warning     |
 | Class action waiver     | `class.action.*waiv`                                | Critical    |

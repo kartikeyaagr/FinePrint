@@ -27,6 +27,7 @@ export function scanRedFlags(text: string): RedFlag[] {
     // Skip if we already matched this pattern (deduplication)
     if (seenPatterns.has(pattern.name)) continue;
 
+    pattern.regex.lastIndex = 0;
     const match = pattern.regex.exec(text);
     if (!match) continue;
 

@@ -34,7 +34,11 @@ export function truncateText(text: string): {
   truncated: boolean;
   originalWordCount: number;
 } {
-  const words = text.split(/\s+/);
+  const trimmed = text.trim();
+  if (!trimmed) {
+    return { text: "", truncated: false, originalWordCount: 0 };
+  }
+  const words = trimmed.split(/\s+/);
   const originalWordCount = words.length;
 
   if (originalWordCount <= MAX_INPUT_WORDS) {

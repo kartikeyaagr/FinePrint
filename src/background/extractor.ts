@@ -14,13 +14,10 @@ export interface ExtractionResult {
   error?: string;
 }
 
-/** Maximum number of redirects to follow. */
-const MAX_REDIRECTS = 5;
-
 /**
  * Fetch a T&C page and extract its text content.
  *
- * - Follows up to 5 redirects
+ * - Follows redirects automatically
  * - Handles auth walls (401/403)
  * - Strips HTML and extracts main content
  * - Truncates at MAX_INPUT_WORDS
@@ -30,24 +27,10 @@ export async function extractText(url: string): Promise<ExtractionResult> {
   let response: Response;
 
   try {
-    // Follow redirects manually to track the count
-    let redirectCount = 0;
     response = await fetch(currentUrl, { redirect: "follow" });
 
-    // Check if we hit too many redirects (fetch with redirect: "follow"
-    // handles this natively, but we check the URL changed)
     if (response.redirected) {
       currentUrl = response.url;
-    }
-
-    // For manual redirect tracking if needed
-    if (redirectCount > MAX_REDIRECTS) {
-      return {
-        text: "",
-        wordCount: 0,
-        truncated: false,
-        error: `Too many redirects (>${MAX_REDIRECTS}) following ${url}`,
-      };
     }
   } catch (err) {
     return {
