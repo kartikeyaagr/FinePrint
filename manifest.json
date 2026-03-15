@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Term Reader",
+  "name": "FinePrint",
   "description": "Understand Terms & Conditions before you agree. LLM-powered plain-English summaries with security ratings.",
   "version": "0.1.0",
   "icons": {
@@ -31,7 +31,7 @@
     }
   ],
   "action": {
-    "default_title": "Term Reader",
+    "default_title": "FinePrint",
     "default_popup": "src/ui/sidepanel/index.html"
   },
   "content_security_policy": {

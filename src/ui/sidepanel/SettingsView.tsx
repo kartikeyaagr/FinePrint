@@ -104,7 +104,7 @@ export function SettingsView({ settings, onSave }: SettingsViewProps) {
 
       {/* About */}
       <div className="text-[10px] text-gray-400 space-y-1 pt-2 border-t border-gray-100">
-        <p><span className="font-medium">Term Reader v0.1.0</span></p>
+        <p><span className="font-medium">FinePrint v0.1.0</span></p>
         <p>
           All analysis runs through your own AI account.
           Your credentials are stored locally and never sent to our servers.

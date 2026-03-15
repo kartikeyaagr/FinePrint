@@ -174,7 +174,7 @@ export default function App() {
           <div className="flex items-center gap-2">
             <span className="text-lg">🛡️</span>
             <h1 className="font-semibold text-base text-gray-900">
-              Term Reader
+              FinePrint
             </h1>
           </div>
           <button
@@ -233,7 +233,7 @@ export default function App() {
           />
         ) : !isConfigured ? (
           <EmptyState
-            title="Welcome to Term Reader"
+            title="Welcome to FinePrint"
             message="To analyze Terms & Conditions, you'll need a free Gemini access code. It takes 30 seconds to set up."
             actionLabel="Set Up Now"
             onAction={() => setView("settings")}

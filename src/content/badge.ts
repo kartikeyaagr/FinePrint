@@ -9,7 +9,7 @@
 import type { AnalysisStatus, DetectedLink } from "../shared/types";
 import { sendToBackground } from "../shared/messages";
 
-const BADGE_TAG = "term-reader-badge";
+const BADGE_TAG = "fineprint-badge";
 const BADGE_ATTR = "data-tr-url";
 
 /** Color map for analysis status / score ranges. */
@@ -102,7 +102,7 @@ export function injectBadge(link: DetectedLink): void {
   const host = document.createElement(BADGE_TAG);
   host.setAttribute(BADGE_ATTR, link.url);
   host.setAttribute("data-tr-status", "idle");
-  host.title = `Term Reader: Analyze ${link.type} (${Math.round(link.confidence * 100)}% confidence)`;
+  host.title = `FinePrint: Analyze ${link.type} (${Math.round(link.confidence * 100)}% confidence)`;
 
   const shadow = host.attachShadow({ mode: "open" });
 
@@ -168,11 +168,11 @@ export function updateBadge(
 
   // Update tooltip
   if (score != null) {
-    host.title = `Term Reader: Score ${score}/10`;
+    host.title = `FinePrint: Score ${score}/10`;
   } else if (status === "analyzing" || status === "extracting") {
-    host.title = "Term Reader: Analyzing...";
+    host.title = "FinePrint: Analyzing...";
   } else if (status === "error") {
-    host.title = "Term Reader: Analysis failed (click to retry)";
+    host.title = "FinePrint: Analysis failed (click to retry)";
   }
 }
 

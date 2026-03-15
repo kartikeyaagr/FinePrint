@@ -1,4 +1,4 @@
-# Architecture — Term Reader
+# Architecture — FinePrint
 
 > Chrome extension (Manifest V3) that auto-detects Terms & Conditions and Privacy Policy
 > links, extracts the full document, analyzes it via the user's own LLM (Claude or Gemini),

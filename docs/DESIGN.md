@@ -1,4 +1,4 @@
-# Design Document — Term Reader
+# Design Document — FinePrint
 
 ## Product Vision
 
@@ -266,7 +266,7 @@ interface TCVersion {
 
 ```
 ┌─────────────────────────────────────────┐
-│  🛡️ Term Reader          [⚙️ Settings] │
+│  🛡️ FinePrint          [⚙️ Settings] │
 ├─────────────────────────────────────────┤
 │  example.com — Terms of Service         │
 │  ⏱ 47 min read → 2 min summary         │

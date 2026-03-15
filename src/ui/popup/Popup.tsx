@@ -95,7 +95,7 @@ export default function Popup() {
     <div className="p-4 space-y-3">
       <div className="flex items-center gap-2">
         <span className="text-lg">🛡️</span>
-        <h1 className="font-semibold text-sm">Term Reader</h1>
+        <h1 className="font-semibold text-sm">FinePrint</h1>
       </div>
 
       {/* Not signed in — prompt setup */}

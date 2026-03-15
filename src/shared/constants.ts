@@ -171,7 +171,7 @@ export const LLM_MAX_RETRIES = 2;
 
 // ─── Cache ──────────────────────────────────────────────────────────
 
-export const CACHE_DB_NAME = "term-reader-cache";
+export const CACHE_DB_NAME = "fineprint-cache";
 export const CACHE_DB_VERSION = 1;
 export const CACHE_MAX_ENTRIES = 500;
 export const CACHE_MAX_SIZE_BYTES = 50 * 1024 * 1024; // 50MB

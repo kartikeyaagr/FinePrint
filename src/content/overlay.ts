@@ -11,7 +11,7 @@ import type { DetectedLink } from "../shared/types";
 import { WORDS_PER_MINUTE } from "../shared/constants";
 import { sendToBackground } from "../shared/messages";
 
-const OVERLAY_TAG = "term-reader-overlay";
+const OVERLAY_TAG = "fineprint-overlay";
 const DISMISSED_KEY = "tr_dismissed_domains";
 
 const OVERLAY_STYLES = `
@@ -121,7 +121,7 @@ export async function showOverlay(
     </div>
     <div class="tr-overlay__body">
       We detected a <strong>${link.type}</strong> document on this page.
-      Term Reader can analyze it for you in seconds.
+      FinePrint can analyze it for you in seconds.
     </div>
     ${readingTime ? `<div class="tr-overlay__meta">${readingTime} (${wordCount!.toLocaleString()} words) — let us summarize it</div>` : ""}
     <div class="tr-overlay__actions">
@@ -169,7 +169,7 @@ export async function dismissOverlay(domain: string): Promise<void> {
       await chrome.storage.local.set({ [DISMISSED_KEY]: dismissed });
     }
   } catch {
-    console.debug("[term-reader] Could not persist overlay dismissal");
+    console.debug("[fineprint] Could not persist overlay dismissal");
   }
 }
 

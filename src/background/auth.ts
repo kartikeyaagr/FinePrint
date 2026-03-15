@@ -1,5 +1,5 @@
 /**
- * Authentication state management for Term Reader.
+ * Authentication state management for FinePrint.
  *
  * Tracks whether the user has completed setup and which provider they use.
  */
@@ -7,7 +7,7 @@
 import type { AuthState } from "../shared/types";
 import { DEFAULT_AUTH_STATE } from "../shared/types";
 
-const AUTH_STATE_KEY = "term-reader-auth-state";
+const AUTH_STATE_KEY = "fineprint-auth-state";
 
 // ─── State Persistence ───────────────────────────────────────────
 
@@ -18,7 +18,7 @@ export async function loadAuthState(): Promise<AuthState> {
       return { ...DEFAULT_AUTH_STATE, ...result[AUTH_STATE_KEY] };
     }
   } catch (err) {
-    console.error("[term-reader] Failed to load auth state:", err);
+    console.error("[fineprint] Failed to load auth state:", err);
   }
   return { ...DEFAULT_AUTH_STATE };
 }

@@ -119,7 +119,7 @@ export class CacheManager {
     } catch (err) {
       if (err instanceof DOMException && err.name === "SecurityError") {
         console.warn(
-          "[term-reader] IndexedDB unavailable (private browsing), using in-memory cache"
+          "[fineprint] IndexedDB unavailable (private browsing), using in-memory cache"
         );
         this.fallback = new InMemoryCache();
         this.initialized = true;

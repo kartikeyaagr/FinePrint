@@ -1,4 +1,4 @@
-# Term Reader
+# FinePrint
 
 Chrome extension (Manifest V3) that auto-detects T&C/privacy links, summarizes them via user's own LLM (Claude/Gemini), and shows security ratings.
 

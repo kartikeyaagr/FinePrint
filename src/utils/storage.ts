@@ -8,7 +8,7 @@
 import type { Settings } from "@/shared/types";
 import { DEFAULT_SETTINGS } from "@/shared/types";
 
-const SETTINGS_KEY = "term-reader-settings";
+const SETTINGS_KEY = "fineprint-settings";
 
 /** Load settings from chrome.storage.local, returning defaults if none saved. */
 export async function loadSettings(): Promise<Settings> {
@@ -19,7 +19,7 @@ export async function loadSettings(): Promise<Settings> {
       return { ...DEFAULT_SETTINGS, ...result[SETTINGS_KEY] };
     }
   } catch (err) {
-    console.error("[term-reader] Failed to load settings:", err);
+    console.error("[fineprint] Failed to load settings:", err);
   }
   return { ...DEFAULT_SETTINGS };
 }
@@ -29,7 +29,7 @@ export async function saveSettings(settings: Settings): Promise<void> {
   try {
     await chrome.storage.local.set({ [SETTINGS_KEY]: settings });
   } catch (err) {
-    console.error("[term-reader] Failed to save settings:", err);
+    console.error("[fineprint] Failed to save settings:", err);
   }
 }
 
@@ -54,6 +54,6 @@ export async function dismissOverlay(domain: string): Promise<void> {
       await chrome.storage.session.set({ "dismissed-overlays": dismissed });
     }
   } catch (err) {
-    console.error("[term-reader] Failed to dismiss overlay:", err);
+    console.error("[fineprint] Failed to dismiss overlay:", err);
   }
 }

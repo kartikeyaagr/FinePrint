@@ -1,5 +1,5 @@
 /**
- * Service worker entry point for the Term Reader extension.
+ * Service worker entry point for the FinePrint extension.
  *
  * Handles:
  *   - Message routing between content script, popup, and side panel
@@ -27,7 +27,7 @@ import {
 
 // ─── Settings Management ──────────────────────────────────────────
 
-const SETTINGS_KEY = "term-reader-settings";
+const SETTINGS_KEY = "fineprint-settings";
 
 async function loadSettings(): Promise<Settings> {
   const result = await chrome.storage.local.get(SETTINGS_KEY);
@@ -251,7 +251,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 // ─── Initialization ───────────────────────────────────────────────
 
 getCache().catch((err) =>
-  console.error("[term-reader] Failed to initialize cache:", err)
+  console.error("[fineprint] Failed to initialize cache:", err)
 );
 
-console.log("[term-reader] Service worker initialized");
+console.log("[fineprint] Service worker initialized");

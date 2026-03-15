@@ -1,5 +1,5 @@
 {
-  "name": "term-reader",
+  "name": "fineprint",
   "version": "1.0.0",
   "description": "Chrome extension that makes Terms & Conditions readable with LLM-powered analysis",
   "private": true,

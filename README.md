@@ -1,6 +1,6 @@
-# Term Reader
+# FinePrint
 
-**A "nutrition label" for Terms & Conditions.** Term Reader is a Chrome extension that auto-detects legal documents on any website and gives you a plain-English summary with a security score — so you never blindly click "I agree" again.
+**A "nutrition label" for Terms & Conditions.** FinePrint is a Chrome extension that auto-detects legal documents on any website and gives you a plain-English summary with a security score — so you never blindly click "I agree" again.
 
 ![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-green)
@@ -13,9 +13,9 @@
 
 The average Terms & Conditions document takes **47 minutes** to read. Nobody reads them. But buried inside are clauses about data selling, forced arbitration, content licensing, and auto-renewal traps that directly affect you.
 
-## How Term Reader Solves It
+## How FinePrint Solves It
 
-1. **Browse normally.** Term Reader runs in the background, watching for T&C and Privacy Policy links.
+1. **Browse normally.** FinePrint runs in the background, watching for T&C and Privacy Policy links.
 2. **See the shield.** A blue shield icon (🛡️) appears next to every detected legal link.
 3. **Click for clarity.** One click gives you a full analysis: security score, red flags, clause-by-clause breakdown — all in plain English.
 4. **Make informed decisions.** Know exactly what you're agreeing to in 30 seconds instead of 47 minutes.
@@ -40,7 +40,7 @@ Scores are color-coded: **green** (8–10, low risk), **yellow** (4–7, medium 
 
 ### Red Flag Detection
 
-Before the AI even finishes analyzing, Term Reader instantly scans for **10 critical patterns** using regex — no network request needed:
+Before the AI even finishes analyzing, FinePrint instantly scans for **10 critical patterns** using regex — no network request needed:
 
 - Forced arbitration clauses
 - Data sale to third parties
@@ -79,7 +79,7 @@ The most concerning clause is pulled out and displayed prominently at the top of
 
 ### Version Diff Tracking
 
-Revisit a site and Term Reader compares the current T&C against the last version it analyzed. You'll see exactly what changed — additions, removals, modifications — and how the security score shifted.
+Revisit a site and FinePrint compares the current T&C against the last version it analyzed. You'll see exactly what changed — additions, removals, modifications — and how the security score shifted.
 
 ### Non-Intrusive Design
 
@@ -101,8 +101,8 @@ Revisit a site and Term Reader compares the current T&C against the last version
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/term-reader.git
-cd term-reader
+git clone https://github.com/yourusername/fineprint.git
+cd fineprint
 
 # Install dependencies
 npm install
@@ -192,7 +192,7 @@ src/
 
 ## Security & Privacy
 
-Term Reader is designed with privacy as a core principle:
+FinePrint is designed with privacy as a core principle:
 
 - **No backend server.** Everything runs locally in your browser.
 - **Your API key stays local.** Stored in `chrome.storage.local` (encrypted at rest by Chrome), never transmitted to any server other than the Gemini API.

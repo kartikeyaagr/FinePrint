@@ -37,7 +37,7 @@ export function Onboarding() {
             <div className="text-center space-y-3">
               <span className="text-5xl block">🛡️</span>
               <h1 className="text-2xl font-bold text-gray-900">
-                Welcome to Term Reader
+                Welcome to FinePrint
               </h1>
               <p className="text-gray-500 text-sm leading-relaxed">
                 Understand Terms & Conditions before you agree.
@@ -51,7 +51,7 @@ export function Onboarding() {
                   Quick setup — get a free access code
                 </p>
                 <p className="text-xs text-gray-400">
-                  Term Reader uses Google&apos;s Gemini AI to analyze documents.
+                  FinePrint uses Google&apos;s Gemini AI to analyze documents.
                   You&apos;ll need a free access code (takes 30 seconds).
                 </p>
               </div>
@@ -106,7 +106,7 @@ export function Onboarding() {
             <div className="text-center">
               <p className="text-[11px] text-gray-400 leading-relaxed">
                 Your documents are analyzed using your own AI account.
-                Term Reader never stores your data on any external server.
+                FinePrint never stores your data on any external server.
               </p>
             </div>
           </div>
@@ -124,7 +124,7 @@ export function Onboarding() {
                 <li>Browse any website normally</li>
                 <li>Look for the 🛡️ shield next to T&C and Privacy links</li>
                 <li>Click the shield to get a plain-English summary</li>
-                <li>Or click the Term Reader icon in your toolbar anytime</li>
+                <li>Or click the FinePrint icon in your toolbar anytime</li>
               </ol>
             </div>
             <button

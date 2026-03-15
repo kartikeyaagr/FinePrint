@@ -29,7 +29,7 @@ export async function sendToTab<T>(
     await chrome.tabs.sendMessage(tabId, { type, data });
   } catch {
     // Tab may have been closed or navigated away — silently ignore
-    console.debug(`[term-reader] Failed to send ${type} to tab ${tabId}`);
+    console.debug(`[fineprint] Failed to send ${type} to tab ${tabId}`);
   }
 }
 
@@ -50,7 +50,7 @@ export function onMessage<T>(
     const result = handler(message.data as T, sender);
     if (result instanceof Promise) {
       result.then(sendResponse).catch((err) => {
-        console.error(`[term-reader] Error handling ${type}:`, err);
+        console.error(`[fineprint] Error handling ${type}:`, err);
         sendResponse({ error: String(err) });
       });
       return true; // Keep message channel open for async response
