@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "FinePrint",
   "description": "Understand Terms & Conditions before you agree. LLM-powered plain-English summaries with security ratings.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "icons": {
     "16": "public/icons/icon-16.png",
     "32": "public/icons/icon-32.png",
