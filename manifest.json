@@ -12,7 +12,8 @@
   "permissions": [
     "activeTab",
     "storage",
-    "tabs"
+    "tabs",
+    "sidePanel"
   ],
   "background": {
     "service_worker": "src/background/service-worker.ts",
@@ -31,8 +32,10 @@
     }
   ],
   "action": {
-    "default_title": "FinePrint",
-    "default_popup": "src/ui/sidepanel/index.html"
+    "default_title": "FinePrint"
+  },
+  "side_panel": {
+    "default_path": "src/ui/sidepanel/index.html"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"

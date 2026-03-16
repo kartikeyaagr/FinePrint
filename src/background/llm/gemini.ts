@@ -113,6 +113,8 @@ export class GeminiAdapter implements LLMAdapter {
           wordCount,
           clauses: partial.clauses || [],
           worstClause: partial.worstClause ?? null,
+          // securityScore is recomputed from clauses by computeRating() in analyzer.ts
+          // after this adapter returns, so these placeholder values are always overwritten.
           securityScore: {
             overall: 5,
             breakdown: {
@@ -123,6 +125,8 @@ export class GeminiAdapter implements LLMAdapter {
               transparency: 5,
             },
           },
+          // redFlags are populated by the regex scanner in analyzer.ts (scanRedFlags).
+          // The LLM prompt intentionally does not request redFlags — the scanner handles them.
           redFlags: [],
           analyzedAt: Date.now(),
           provider: "gemini",

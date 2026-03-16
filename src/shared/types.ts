@@ -115,7 +115,7 @@ export interface TCDiff {
 
 // ─── LLM ────────────────────────────────────────────────────────────
 
-export type LLMProvider = "gemini";
+export type LLMProvider = "gemini" | "claude";
 
 export interface LLMConfig {
   provider: LLMProvider;
@@ -128,6 +128,8 @@ export interface LLMConfig {
 export type MessageType =
   | "TC_DETECTED"
   | "ANALYZE_REQUEST"
+  | "ANALYZE_ALL_REQUEST"
+  | "MULTI_ANALYSIS_STARTED"
   | "BADGE_UPDATE"
   | "ANALYSIS_PROGRESS"
   | "ANALYSIS_RESULT"
@@ -154,6 +156,15 @@ export interface TCDetectedData {
 export interface AnalyzeRequestData {
   url: string;
   tabId?: number;
+}
+
+export interface AnalyzeAllRequestData {
+  links: DetectedLink[];
+  tabId?: number;
+}
+
+export interface MultiAnalysisStartedData {
+  links: DetectedLink[];
 }
 
 export interface BadgeUpdateData {

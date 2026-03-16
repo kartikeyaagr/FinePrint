@@ -4,7 +4,7 @@
  * Tracks whether the user has completed setup and which provider they use.
  */
 
-import type { AuthState } from "../shared/types";
+import type { AuthState, LLMProvider } from "../shared/types";
 import { DEFAULT_AUTH_STATE } from "../shared/types";
 
 const AUTH_STATE_KEY = "fineprint-auth-state";
@@ -33,7 +33,7 @@ export async function saveAuthState(state: AuthState): Promise<void> {
  * Mark setup as complete with a manual API key.
  */
 export async function completeSetupWithApiKey(
-  provider: "gemini"
+  provider: LLMProvider
 ): Promise<AuthState> {
   const state: AuthState = {
     signedIn: true,

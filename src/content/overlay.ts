@@ -84,11 +84,13 @@ const OVERLAY_STYLES = `
  * Show a non-intrusive overlay prompting the user to analyze terms
  * before accepting.
  *
- * @param link      - The detected T&C link to analyze.
+ * @param link      - The highest-confidence detected link (used for domain + copy).
+ * @param allLinks  - All detected links on the page (all will be analyzed on click).
  * @param wordCount - Optional estimated word count for reading time display.
  */
 export async function showOverlay(
   link: DetectedLink,
+  allLinks: DetectedLink[],
   wordCount?: number
 ): Promise<void> {
   let domain: string;
@@ -128,11 +130,16 @@ export async function showOverlay(
 
   const body = document.createElement("div");
   body.className = "tr-overlay__body";
-  body.appendChild(document.createTextNode("We detected a "));
-  const strong = document.createElement("strong");
-  strong.textContent = link.type;
-  body.appendChild(strong);
-  body.appendChild(document.createTextNode(" document on this page. FinePrint can analyze it for you in seconds."));
+  const docCount = allLinks.length;
+  if (docCount > 1) {
+    body.textContent = `We detected ${docCount} legal documents on this page (${allLinks.map((l) => l.type).join(", ")}). FinePrint can analyze all of them for you in seconds.`;
+  } else {
+    body.appendChild(document.createTextNode("We detected a "));
+    const strong = document.createElement("strong");
+    strong.textContent = link.type;
+    body.appendChild(strong);
+    body.appendChild(document.createTextNode(" document on this page. FinePrint can analyze it for you in seconds."));
+  }
   container.appendChild(body);
 
   if (readingTime) {
@@ -147,7 +154,7 @@ export async function showOverlay(
   const analyzeBtn = document.createElement("button");
   analyzeBtn.className = "tr-btn tr-btn--primary";
   analyzeBtn.setAttribute("data-action", "analyze");
-  analyzeBtn.textContent = "Analyze";
+  analyzeBtn.textContent = docCount > 1 ? "Analyze All" : "Analyze";
   const dismissBtn = document.createElement("button");
   dismissBtn.className = "tr-btn tr-btn--secondary";
   dismissBtn.setAttribute("data-action", "dismiss");
@@ -164,7 +171,7 @@ export async function showOverlay(
     const action = target.getAttribute("data-action");
 
     if (action === "analyze") {
-      sendToBackground("ANALYZE_REQUEST", { url: link.url });
+      sendToBackground("ANALYZE_ALL_REQUEST", { links: allLinks });
       host.remove();
     } else if (action === "dismiss") {
       dismissOverlay(domain);

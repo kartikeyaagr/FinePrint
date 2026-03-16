@@ -1,4 +1,10 @@
-# Privacy Policy — FinePrint
+<div align="center">
+  <img src="public/icons/icon-128.png" alt="FinePrint" width="72" />
+  <h1>FinePrint — Privacy Policy</h1>
+  <p><em>Read the fine print. We already did.</em></p>
+</div>
+
+---
 
 **Last updated:** March 15, 2026
 
@@ -8,7 +14,7 @@ FinePrint is a Chrome extension that helps you understand Terms & Conditions and
 
 ## Summary
 
-- FinePrint **does not collect, transmit, or store any personal data** on external servers.
+- FinePrint **does not collect, transmit, or store any personal data** on external servers operated by FinePrint. (Exception: if you have Chrome Sync enabled, locally stored data including your API key may sync to Google's servers — see Section 3.)
 - All processing happens **locally in your browser** or through a **direct API call to Google's Gemini service using your own API key**.
 - We have **no backend, no analytics, no tracking, and no user accounts**.
 
@@ -63,7 +69,7 @@ All data is stored **locally on your device** using standard Chrome extension st
 - **`chrome.storage.local`** — Stores your API key, extension settings, and overlay dismissal preferences. This storage is encrypted at rest by Chrome and is only accessible to the FinePrint extension. **Note:** If you have Chrome Sync enabled, this data (including your API key) may be synchronized to Google's servers and your other Chrome browsers. You can disable extension sync in Chrome settings to keep data on a single device.
 - **IndexedDB** — Stores cached analysis results and document version history for diff tracking. This data remains on your device and is subject to a maximum storage limit of 50 MB with automatic cleanup of oldest entries.
 
-No data is stored on any external server, cloud service, or database operated by FinePrint or its developers.
+FinePrint does not operate any external servers, cloud services, or databases. As noted above, Chrome Sync may store extension data on Google's servers if you have that feature enabled — this is outside FinePrint's control.
 
 ---
 
@@ -95,11 +101,12 @@ FinePrint **does not share any data** with:
 
 ## 6. Permissions Explained
 
-| Permission  | Why it's needed                                                                                       |
-| ----------- | ----------------------------------------------------------------------------------------------------- |
-| `activeTab` | To detect legal document links on the page you're currently viewing                                   |
-| `storage`   | To save your API key, settings, and cached analysis results locally                                   |
-| `tabs`      | To identify the current page URL for cache lookup and to send messages between the popup and the page |
+| Permission   | Why it's needed                                                                                        |
+| ------------ | ------------------------------------------------------------------------------------------------------ |
+| `activeTab`  | To detect legal document links on the page you're currently viewing                                    |
+| `storage`    | To save your API key, settings, and cached analysis results locally                                    |
+| `tabs`       | To identify the current page URL for cache lookup and to send messages between the side panel and page |
+| `sidePanel`  | To open the analysis side panel programmatically when you click a shield badge                         |
 
 The extension runs content scripts on all URLs (`<all_urls>`) to detect T&C links across all websites. The content script is lightweight and only performs pattern matching — it does not read or transmit page content.
 
@@ -112,28 +119,38 @@ You have full control over your data:
 - **Delete cached analyses** — Clear the extension's storage from `chrome://extensions` → FinePrint → Details → "Clear data"
 - **Remove your API key** — Open the extension settings and delete your access code at any time
 - **Disable detection** — Toggle off "Auto-detect T&C links" in settings to stop all page scanning
-- **Uninstall** — Removing the extension deletes all locally stored data immediately
+- **Uninstall** — Removing the extension deletes all locally stored data immediately. If you have Chrome Sync enabled, also clear synced extension data via your [Google Account sync settings](https://myaccount.google.com/data-and-privacy) to ensure complete removal from Google's servers.
 
 ---
 
-## 8. Children's Privacy
+## 8. International Data Transfers
 
-FinePrint does not knowingly collect any personal information from children under the age of 13. The extension does not collect personal information from any user.
+FinePrint itself does not transfer data across borders. However, when you request an analysis, the text of the legal document is sent directly from your browser to the Google Gemini API. Google's servers may be located outside your country of residence.
+
+If you are located in the European Economic Area (EEA), the United Kingdom, or Switzerland, be aware that this transfer to Google's infrastructure is governed by [Google's data processing terms](https://cloud.google.com/terms/data-processing-addendum) and applicable Standard Contractual Clauses. FinePrint's developers have no control over, and are not a party to, these transfers.
+
+If international data transfers are a concern for you, you should review Google's privacy documentation before using the analysis feature.
 
 ---
 
-## 9. Changes to This Policy
+## 9. Children's Privacy
+
+FinePrint is not directed at children under the age of 13 and does not knowingly collect personal information from children. The extension does not intentionally collect personal data beyond what is strictly necessary for its functionality: a locally-stored API key you provide, and the text of legal documents you explicitly choose to analyze.
+
+---
+
+## 10. Changes to This Policy
 
 If this privacy policy is updated, the changes will be published in the extension's repository and the "Last updated" date at the top will be revised. Continued use of the extension after changes constitutes acceptance of the updated policy.
 
 ---
 
-## 10. Contact
+## 11. Contact
 
 If you have questions about this privacy policy or the extension's data practices, please open an issue on the [GitHub repository](https://github.com/kartikeyaagr/fineprint) or contact the developer directly.
 
 ---
 
-## 11. Open Source
+## 12. Open Source
 
 FinePrint is open source. You can review the complete source code to verify every claim in this privacy policy. The code is available at [github.com/kartikeyaagr/fineprint](https://github.com/kartikeyaagr/fineprint).

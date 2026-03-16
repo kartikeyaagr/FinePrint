@@ -53,15 +53,19 @@ export function DiffView({ diff }: DiffViewProps) {
             {" → "}
             <span
               className={
-                diff.scoreChange.after >= diff.scoreChange.before
+                diff.scoreChange.after > diff.scoreChange.before
                   ? "text-green-600"
-                  : "text-red-600"
+                  : diff.scoreChange.after < diff.scoreChange.before
+                  ? "text-red-600"
+                  : "text-gray-600"
               }
             >
               {diff.scoreChange.after.toFixed(1)}
-              {diff.scoreChange.after >= diff.scoreChange.before
+              {diff.scoreChange.after > diff.scoreChange.before
                 ? " ↑"
-                : " ↓"}
+                : diff.scoreChange.after < diff.scoreChange.before
+                ? " ↓"
+                : " →"}
             </span>
           </p>
         )}

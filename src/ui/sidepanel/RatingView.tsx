@@ -60,7 +60,7 @@ export function RatingView({ score }: RatingViewProps) {
         <p className={`text-sm font-medium ${color.text}`}>
           {getScoreLabel(score.overall)}
         </p>
-        <p className="text-xs text-gray-400 max-w-[260px]">
+        <p className="text-xs text-gray-400 max-w-[260px] mx-auto">
           {getScoreExplanation(score.overall)}
         </p>
       </div>

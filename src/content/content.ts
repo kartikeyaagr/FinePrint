@@ -15,14 +15,22 @@ import type { BadgeUpdateData, DetectedLink } from "../shared/types";
 import { SCAN_DEBOUNCE_MS } from "../shared/constants";
 import { sendToBackground, onMessage } from "../shared/messages";
 import { scanForTCLinks } from "./detector";
-import { injectBadge, updateBadge, removeBadges, removeStaleBadges } from "./badge";
+import { injectBadge, updateBadge, removeBadges, removeStaleBadges, setAnalyzeAllCallback } from "./badge";
 import { showOverlay, dismissOverlay } from "./overlay";
 
 /** Track the last URL we scanned to detect navigation. */
 let lastScannedUrl = "";
 
-/** Track detected links to avoid re-processing. */
-const detectedUrls = new Set<string>();
+/** Track detected links by URL to avoid re-processing and enable batch analysis. */
+const detectedLinks = new Map<string, DetectedLink>();
+
+// Register callback: when any badge is clicked, analyze all detected links
+setAnalyzeAllCallback((_clickedUrl: string) => {
+  const links = Array.from(detectedLinks.values());
+  if (links.length > 0) {
+    sendToBackground("ANALYZE_ALL_REQUEST", { links });
+  }
+});
 
 /** Track domains where overlay has already been shown this session. */
 const overlayShownDomains = new Set<string>();
@@ -50,12 +58,12 @@ function runDetection(): void {
   // If the URL changed, decide whether to reset detection state
   if (currentUrl !== lastScannedUrl) {
     if (isSameOriginNavigation(lastScannedUrl, currentUrl)) {
-      // SPA navigation — keep detectedUrls, just remove stale badges
+      // SPA navigation — keep detectedLinks, just remove stale badges
       // whose anchors no longer exist in the DOM
       removeStaleBadges();
     } else {
       // Cross-origin navigation — full reset
-      detectedUrls.clear();
+      detectedLinks.clear();
       removeBadges();
     }
     lastScannedUrl = currentUrl;
@@ -65,8 +73,8 @@ function runDetection(): void {
   const newLinks: DetectedLink[] = [];
 
   for (const link of links) {
-    if (detectedUrls.has(link.url)) continue;
-    detectedUrls.add(link.url);
+    if (detectedLinks.has(link.url)) continue;
+    detectedLinks.set(link.url, link);
     newLinks.push(link);
     injectBadge(link);
   }
@@ -79,13 +87,14 @@ function runDetection(): void {
     pageUrl: currentUrl,
   });
 
-  // Show overlay for the highest-confidence link, but only once per domain per session
+  // Show overlay for the highest-confidence link, but only once per domain per session.
+  // Pass all detected links so the "Analyze" button covers everything on the page.
   const best = newLinks[0]; // Already sorted by confidence
   if (best) {
     const pageDomain = location.hostname;
     if (!overlayShownDomains.has(pageDomain)) {
       overlayShownDomains.add(pageDomain);
-      showOverlay(best);
+      showOverlay(best, Array.from(detectedLinks.values()));
     }
   }
 }
@@ -136,8 +145,7 @@ onMessage<BadgeUpdateData>("BADGE_UPDATE", (data) => {
 chrome.runtime.onMessage.addListener(
   (message, _sender, sendResponse) => {
     if (message.type === "GET_DETECTED_LINKS") {
-      const links = scanForTCLinks();
-      sendResponse({ links });
+      sendResponse({ links: Array.from(detectedLinks.values()) });
       return false;
     }
     if (message.type === "DISMISS_OVERLAY") {

@@ -16,6 +16,7 @@ export default defineConfig({
     sourcemap: process.env.NODE_ENV === "development",
     rollupOptions: {
       input: {
+        sidepanel: resolve(__dirname, "src/ui/sidepanel/index.html"),
         onboarding: resolve(__dirname, "src/ui/onboarding/index.html"),
       },
     },

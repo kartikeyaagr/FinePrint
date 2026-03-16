@@ -109,7 +109,12 @@ function buildSelector(anchor: HTMLAnchorElement): string {
   if (anchor.id) return `#${CSS.escape(anchor.id)}`;
 
   const href = anchor.getAttribute("href");
-  if (href) return `a[href="${CSS.escape(href)}"]`;
+  if (href) {
+    // CSS.escape() is for identifiers, not attribute values.
+    // For an attribute selector value we only need to escape backslashes and the delimiter quote.
+    const escaped = href.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    return `a[href="${escaped}"]`;
+  }
 
   // Cannot reliably identify this anchor — return empty string
   return "";

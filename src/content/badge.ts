@@ -12,6 +12,13 @@ import { sendToBackground } from "../shared/messages";
 const BADGE_TAG = "fineprint-badge";
 const BADGE_ATTR = "data-tr-url";
 
+/** Callback set by content.ts to trigger analysis of all detected links. */
+let analyzeAllCallback: ((clickedUrl: string) => void) | null = null;
+
+export function setAnalyzeAllCallback(cb: (clickedUrl: string) => void): void {
+  analyzeAllCallback = cb;
+}
+
 /** Color map for analysis status / score ranges. */
 function badgeColor(status: AnalysisStatus, score?: number): string {
   if (status === "analyzing" || status === "extracting") return "#888"; // gray, spinner
@@ -118,7 +125,7 @@ export function injectBadge(link: DetectedLink): void {
   badge.style.backgroundColor = badgeColor("idle");
   shadow.appendChild(badge);
 
-  // Click handler — request analysis with visual feedback
+  // Click handler — request analysis of all detected links with visual feedback
   host.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -126,7 +133,11 @@ export function injectBadge(link: DetectedLink): void {
     // Force reflow so re-adding the class restarts the animation
     void badge.offsetWidth;
     badge.classList.add("tr-badge--clicked");
-    sendToBackground("ANALYZE_REQUEST", { url: link.url });
+    if (analyzeAllCallback) {
+      analyzeAllCallback(link.url);
+    } else {
+      sendToBackground("ANALYZE_REQUEST", { url: link.url });
+    }
   });
 
   // Insert after the anchor

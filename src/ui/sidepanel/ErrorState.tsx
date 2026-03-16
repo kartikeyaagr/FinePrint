@@ -19,7 +19,7 @@ function friendlyMessage(raw: string): string {
 
 export function ErrorState({ error, onRetry }: ErrorStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center p-8 text-center space-y-3 min-h-[300px]">
+    <div className="flex flex-col items-center justify-center p-8 text-center space-y-3 min-h-full">
       <span className="text-4xl">⚠️</span>
       <h2 className="text-base font-semibold text-gray-800">
         Something went wrong

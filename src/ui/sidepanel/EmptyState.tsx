@@ -12,7 +12,7 @@ export function EmptyState({
   onAction,
 }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center p-8 text-center space-y-3 min-h-[300px]">
+    <div className="flex flex-col items-center justify-center p-8 text-center space-y-3 min-h-full">
       <span className="text-4xl">🛡️</span>
       <h2 className="text-base font-semibold text-gray-800">{title}</h2>
       <p className="text-sm text-gray-500 max-w-[240px]">{message}</p>

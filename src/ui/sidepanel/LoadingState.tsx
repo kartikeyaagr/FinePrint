@@ -17,7 +17,7 @@ export function LoadingState({ progress }: LoadingStateProps) {
   const pct = progress ? Math.round(progress.progress * 100) : 0;
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 text-center space-y-4 min-h-[300px]">
+    <div className="flex flex-col items-center justify-center p-8 text-center space-y-4 min-h-full">
       {/* Spinning shield */}
       <div className="animate-spin text-4xl">🛡️</div>
 

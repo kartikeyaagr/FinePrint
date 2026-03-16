@@ -10,6 +10,8 @@
 
 import type {
   AnalyzeRequestData,
+  AnalyzeAllRequestData,
+  MultiAnalysisStartedData,
   BadgeUpdateData,
   Settings,
   TCDetectedData,
@@ -176,9 +178,32 @@ chrome.runtime.onMessage.addListener(
       }
 
       // ── Analysis ──────────────────────────────────
+      case "ANALYZE_ALL_REQUEST": {
+        const request = data as AnalyzeAllRequestData;
+        const tabId = request.tabId ?? sender.tab?.id;
+        // Open the side panel — this is in response to a user gesture (badge click)
+        if (tabId) {
+          chrome.sidePanel.open({ tabId }).catch(() => {});
+        }
+        // Tell the side panel which documents to expect
+        chrome.runtime.sendMessage({
+          type: "MULTI_ANALYSIS_STARTED",
+          data: { links: request.links } satisfies MultiAnalysisStartedData,
+        }).catch(() => {});
+        // Kick off parallel analyses
+        for (const link of request.links) {
+          runAnalysis(link.url, tabId);
+        }
+        sendResponse({ status: "started" });
+        return false;
+      }
+
       case "ANALYZE_REQUEST": {
         const request = data as AnalyzeRequestData;
         const tabId = request.tabId ?? sender.tab?.id;
+        if (tabId) {
+          chrome.sidePanel.open({ tabId }).catch(() => {});
+        }
         runAnalysis(request.url, tabId);
         sendResponse({ status: "started" });
         return false;
@@ -233,6 +258,14 @@ chrome.runtime.onMessage.addListener(
     }
   }
 );
+
+// ─── Toolbar Icon Click ───────────────────────────────────────────
+
+chrome.action.onClicked.addListener((tab) => {
+  if (tab.id) {
+    chrome.sidePanel.open({ tabId: tab.id }).catch(() => {});
+  }
+});
 
 // ─── Install / Onboarding ─────────────────────────────────────────
 

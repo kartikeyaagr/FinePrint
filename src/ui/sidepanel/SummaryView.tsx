@@ -8,7 +8,7 @@ interface SummaryViewProps {
 
 export function SummaryView({ result }: SummaryViewProps) {
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-4 min-h-full">
       {/* Page info + reading time */}
       <div className="space-y-1">
         <h2 className="font-semibold text-gray-900">{result.title}</h2>

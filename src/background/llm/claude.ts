@@ -37,7 +37,12 @@ export class ClaudeAdapter implements LLMAdapter {
     }
 
     const { system, user } = buildAnalysisPrompt(text, url);
-    const domain = new URL(url).hostname;
+    let domain: string;
+    try {
+      domain = new URL(url).hostname;
+    } catch {
+      throw new NonRetryableError(`Invalid URL provided for analysis: ${url}`);
+    }
 
     const makeRequest = async (): Promise<AnalysisResult> => {
       const controller = new AbortController();
@@ -100,6 +105,8 @@ export class ClaudeAdapter implements LLMAdapter {
           wordCount,
           clauses: partial.clauses || [],
           worstClause: partial.worstClause ?? null,
+          // securityScore is recomputed from clauses by computeRating() in analyzer.ts
+          // after this adapter returns, so these placeholder values are always overwritten.
           securityScore: {
             overall: 5,
             breakdown: {
@@ -110,9 +117,11 @@ export class ClaudeAdapter implements LLMAdapter {
               transparency: 5,
             },
           },
+          // redFlags are populated by the regex scanner in analyzer.ts (scanRedFlags).
+          // The LLM prompt intentionally does not request redFlags — the scanner handles them.
           redFlags: [],
           analyzedAt: Date.now(),
-          provider: "gemini" as LLMProvider, // Claude adapter unused — provider field satisfies type
+          provider: "claude" as LLMProvider,
         };
       } finally {
         clearTimeout(timeout);

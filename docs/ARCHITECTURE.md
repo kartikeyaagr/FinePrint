@@ -1,4 +1,10 @@
-# Architecture — FinePrint
+<div align="center">
+  <img src="../public/icons/icon-128.png" alt="FinePrint" width="72" />
+  <h1>FinePrint — Architecture</h1>
+  <p><em>Read the fine print. We already did.</em></p>
+</div>
+
+---
 
 > Chrome extension (Manifest V3) that auto-detects Terms & Conditions and Privacy Policy
 > links, extracts the full document, analyzes it via the user's own LLM (Claude or Gemini),
