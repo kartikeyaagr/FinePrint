@@ -102,7 +102,7 @@ Revisit a site and FinePrint compares the current T&C against the last version i
 ### Prerequisites
 
 - Google Chrome (or any Chromium-based browser)
-- A free [Google Gemini API key](https://aistudio.google.com/apikey) **or** an [Anthropic Claude API key](https://console.anthropic.com/) (takes 30 seconds)
+- A free [Google Gemini API key](https://aistudio.google.com/apikey) (takes 30 seconds)
 
 ### Install from Source
 
@@ -149,8 +149,7 @@ On first install, an onboarding page opens with step-by-step instructions to set
 │                          └──────────────────┘                │
 │                                  │                           │
 │                          ┌───────▼───────┐                   │
-│                          │  Gemini  /    │                   │
-│                          │  Claude API   │                   │
+│                          │  Gemini API   │                   │
 │                          │  (user's key) │                   │
 │                          └───────────────┘                   │
 └──────────────────────────────────────────────────────────────┘
@@ -165,7 +164,7 @@ On first install, an onboarding page opens with step-by-step instructions to set
 | Language            | TypeScript 5.8                     |
 | Build               | Vite + CRXJS                       |
 | Storage             | IndexedDB (via `idb`)              |
-| AI                  | Google Gemini or Anthropic Claude (user's own key) |
+| AI                  | Google Gemini API (user's own key) |
 | Content isolation   | Shadow DOM                         |
 
 ### Project Structure
@@ -187,7 +186,6 @@ src/
 │   └── llm/          # LLM adapter layer
 │       ├── adapter.ts
 │       ├── gemini.ts  # Google Gemini adapter
-│       ├── claude.ts  # Anthropic Claude adapter
 │       ├── prompts.ts # Prompt templates with injection defense
 │       └── utils.ts   # Response parsing, retry logic
 ├── ui/

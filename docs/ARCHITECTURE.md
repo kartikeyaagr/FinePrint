@@ -7,7 +7,7 @@
 ---
 
 > Chrome extension (Manifest V3) that auto-detects Terms & Conditions and Privacy Policy
-> links, extracts the full document, analyzes it via the user's own LLM (Claude or Gemini),
+> links, extracts the full document, analyzes it via the user's own Google Gemini API key,
 > and presents a plain-English summary with security ratings.
 
 ## System Architecture
@@ -36,10 +36,10 @@
                   │  LLM API   │ │  Cache /   │ │  pdf.js   │
                   │            │ │  Storage   │ │ (lazy)    │
                   │ ┌────────┐ │ │ IndexedDB  │ │           │
-                  │ │ Claude │ │ │            │ │ PDF text  │
-                  │ ├────────┤ │ │ • T&C text │ │ extraction│
-                  │ │ Gemini │ │ │ • Summaries│ └───────────┘
-                  │ └────────┘ │ │ • Diffs    │
+                  │ │ Gemini │ │ │            │ │ PDF text  │
+                  │ └────────┘ │ │ • T&C text │ │ extraction│
+                  │            │ │ • Summaries│ └───────────┘
+                  │            │ │ • Diffs    │
                   └────────────┘ │ • Ratings  │
                                  └────────────┘
 ```
@@ -80,7 +80,6 @@ Handles all heavy lifting. Runs in extension's isolated context.
 | Module       | Responsibility                                   |
 | ------------ | ------------------------------------------------ |
 | `adapter.ts` | Common interface for all LLM providers           |
-| `claude.ts`  | Anthropic Claude API implementation              |
 | `gemini.ts`  | Google Gemini API implementation                 |
 | `prompts.ts` | Prompt templates for summary, rating, comparison |
 
@@ -195,9 +194,7 @@ INPUT ──▶ VALIDATION ──▶ TRANSFORM ──▶ PERSIST ──▶ OUTPU
 | ----------------- | -------------------- | ------------------------------------------------- |
 | Manifest version  | V3                   | Required for new Chrome extensions                |
 | LLM API ownership | User's own account   | Zero cost to us, maximum privacy                  |
-| Auth: Gemini      | Google OAuth via     | Seamless UX — user clicks "Sign in with Google"   |
-|                   | chrome.identity      |                                                   |
-| Auth: Claude      | Manual API key       | Anthropic has no consumer OAuth                   |
+| Auth: Gemini      | Manual API key       | User pastes key from Google AI Studio             |
 | Onboarding        | Install-time page    | Opens automatically on first install              |
 | UI framework      | React + Tailwind     | Best ecosystem for Chrome extension UIs           |
 | Browser scope     | Chrome-only (v1)     | Covers Chromium family; Firefox in Phase 2        |

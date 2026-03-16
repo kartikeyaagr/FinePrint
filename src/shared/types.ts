@@ -115,7 +115,7 @@ export interface TCDiff {
 
 // ─── LLM ────────────────────────────────────────────────────────────
 
-export type LLMProvider = "gemini" | "claude";
+export type LLMProvider = "gemini";
 
 export interface LLMConfig {
   provider: LLMProvider;
