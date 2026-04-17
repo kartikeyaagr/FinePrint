@@ -54,7 +54,7 @@ export function SettingsView({ settings, onSave }: SettingsViewProps) {
           helpText="Get your free code from aistudio.google.com/apikey (takes 30 seconds)"
           helpLink="https://aistudio.google.com/apikey"
           helpLinkLabel="Google AI Studio"
-          helpExtra="sign in with Google, click &quot;Create API key&quot;, and paste it here"
+          helpExtra='sign in with Google, click "Create API key", and paste it here'
         />
       </section>
 
@@ -112,10 +112,12 @@ export function SettingsView({ settings, onSave }: SettingsViewProps) {
 
       {/* About */}
       <div className="text-[10px] text-gray-400 space-y-1 pt-2 border-t border-gray-100">
-        <p><span className="font-medium">FinePrint v0.1.0</span></p>
         <p>
-          All analysis runs through your own AI account.
-          Your credentials are stored locally and never sent to our servers.
+          <span className="font-medium">FinePrint v1.0.0</span>
+        </p>
+        <p>
+          All analysis runs through your own AI account. Your credentials are
+          stored locally and never sent to our servers.
         </p>
       </div>
     </div>
