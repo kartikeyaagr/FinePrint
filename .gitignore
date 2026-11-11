@@ -6,4 +6,5 @@ dist/
 .env.local
 .gstack/
 .claude
-TODOS.md
+TODOS.mddocs/
+tasks/
